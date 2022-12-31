@@ -1,0 +1,29 @@
+example:
+  0:
+    period: 20
+    0:
+      main_colors:
+        - 114514
+      fade_colors:
+        - 1919810
+      type: BURST
+      flicker: true
+      trail: true
+      power: 10
+      x_pos: 0
+      y_pos: 0
+      z_pos: 0
+  1:
+    period: 20
+    0:
+      main_colors:
+        - 114514
+      fade_colors:
+        - 1919810
+      type: BURST
+      flicker: true
+      trail: true
+      power: 10
+      x_pos: 0
+      y_pos: 0
+      z_pos: 0
