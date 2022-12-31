@@ -1,0 +1,33 @@
+name: Firework
+version: '${project.version}'
+main: org.abstruck.plugin.firework.Firework
+api-version: 1.16
+authors: [ Astrack ]
+
+commands:
+  firework:
+    aliases: fw
+    description: launch a firework show
+    usage: /firework launch <name> \n /firework load <name> \n /firework reload \n /firework list
+    permission: firework.*
+    permission-message: you do not have the permission
+
+permissions:
+  firework.*:
+    description: all firework permission
+    children:
+      firework.launch: true
+      firework.load: true
+      firework.reload: true
+  firework.launch:
+    description: Allows you to launch a firework show
+    default: op
+  firework.load:
+    description: Allows you to load a firework file
+    default: op
+  firework.reload:
+    description: Allows you te reload the firework file
+    default: op
+  firework.list:
+    description: Allow you to list the loaded firework shows
+    default: op
