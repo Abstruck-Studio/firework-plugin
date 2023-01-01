@@ -1,15 +1,26 @@
+#firework show's name
 example:
+  #a group of fireworks that will explode at the same time
   0:
+    #wait <period>ms after launching all the fireworks in this group(the time that fireworks in air is not included)
     period: 20
+    #a firework
     0:
+      #the main colors (rgb in int form)
       main_colors:
         - 114514
+      #the fade colors (rgb in int form)
       fade_colors:
         - 1919810
+      #the type of the firework
       type: BURST
+      #is flicker
       flicker: true
+      #is trail
       trail: true
+      #the time that the firework will last
       power: 10
+      #the relative position to the launch command sender
       x_pos: 0
       y_pos: 0
       z_pos: 0
