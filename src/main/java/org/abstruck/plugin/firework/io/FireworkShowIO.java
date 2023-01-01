@@ -12,221 +12,145 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
  * @author Astrack
  */
 public class FireworkShowIO {
-    private static File file = new File(Firework.getInstance().getDataFolder().getPath()+"/fireworks.yml");
-    private static final FileConfiguration fireworkShowsFile = YamlConfiguration.loadConfiguration(file);
+    private static final File FILE = new File(Firework.getInstance().getDataFolder().getPath()+"/fireworks.yml");
+    private static final FileConfiguration FIREWORK_SHOWS_FILE = YamlConfiguration.loadConfiguration(FILE);
     private static Set<String> fireworkNames;
 
     static {
         reloadFireworkShowNames();
     }
-//    public static FireworkShow readFireworkShow(String name){
-//        FireworkShow fireworkShow = FireworkShow.createFireworkShow(name);
-//
-//        ConfigurationSection fwsf = fireworkShowFile.getConfigurationSection("fireworks."+name);
-//
-//        checkNull(fwsf);
-//        //在firework show层
-//        fwsf.getKeys(false).stream().peek(
-//                (String key)-> readFireworks(fireworkShow, fwsf, key)
-//        );
-//
-//        return fireworkShow;
-//    }
-//
-//    private static void checkNull(ConfigurationSection fwsf) {
-//        if (fwsf == null){
-//            throw new RuntimeException("an exception curred when read the firework show file");
-//        }
-//    }
-//
-//    private static void readFireworks(FireworkShow fireworkShow, ConfigurationSection fwsf, String key) {
-//        List< org.abstruck.plugin.firework.runtime.Firework > fireworkList = new ArrayList<>();
-//        //在fireworks 层
-//        Objects.requireNonNull(fwsf.getConfigurationSection(key)).getKeys(false).stream().map(
-//                (String str)->{
-//                    if ("period".equals(str)){
-//                        return str;
-//                    }
-//                    //在firework层
-//                    readFirework(fwsf, key, fireworkList, str);
-//                    return str;
-//                }
-//        );
-//
-//        fireworkShow.addFireworks(Fireworks.createFireworks(fireworkList, fwsf.getInt(key +".period")));
-//    }
-//
-//    private static void readFirework(ConfigurationSection fwsf, String key, List<org.abstruck.plugin.firework.runtime.Firework> fireworkList, String str) {
-//        ConfigurationSection fwf = fwsf.getConfigurationSection(key+"."+ str);
-//
-//        List<Color> mainColor = new ArrayList<>();
-//        List<Color> fadeColor = new ArrayList<>();
-//        FireworkEffect.Type type;
-//        boolean flicker;
-//        boolean trail;
-//        int power;
-//        int xPos;
-//        int yPos;
-//        int zPos;
-//
-//        readMainColors(fwf, mainColor);
-//
-//        readFadeColors(fwf, fadeColor);
-//
-//        type = readType(fwf);
-//        flicker = readIsFlicker(fwf);
-//        trail = isTrail(fwf);
-//        power = readPower(fwf);
-//        xPos = readXPos(fwf);
-//        yPos = readYPos(fwf);
-//        zPos = readZPos(fwf);
-//
-//        addNewFireworkToFireworkList(fireworkList, mainColor, fadeColor, type, flicker, trail, power, xPos, yPos, zPos);
-//
-//    }
-//
-//    private static void addNewFireworkToFireworkList(List<org.abstruck.plugin.firework.runtime.Firework> fireworkList, List<Color> mainColor, List<Color> fadeColor, FireworkEffect.Type type, boolean flicker, boolean trail, int power, int xPos, int yPos, int zPos) {
-//        fireworkList.add(org.abstruck.plugin.firework.runtime.Firework.createFirework(
-//                mainColor,
-//                fadeColor,
-//                type,
-//                flicker,
-//                trail,
-//                power,
-//                xPos,
-//                yPos,
-//                zPos
-//        ));
-//    }
-//
-//    private static int readZPos(ConfigurationSection fwf) {
-//        int zPos;
-//        zPos = fwf.getInt("z_pos");
-//        return zPos;
-//    }
-//
-//    private static int readYPos(ConfigurationSection fwf) {
-//        int yPos;
-//        yPos = fwf.getInt("y_pos");
-//        return yPos;
-//    }
-//
-//    private static int readXPos(ConfigurationSection fwf) {
-//        int xPos;
-//        xPos = fwf.getInt("x_pos");
-//        return xPos;
-//    }
-//
-//    private static int readPower(ConfigurationSection fwf) {
-//        int power;
-//        power = fwf.getInt("power");
-//        return power;
-//    }
-//
-//    private static boolean isTrail(ConfigurationSection fwf) {
-//        boolean trail;
-//        trail= fwf.getBoolean("trail");
-//        return trail;
-//    }
-//
-//    private static boolean readIsFlicker(ConfigurationSection fwf) {
-//        boolean flicker;
-//        flicker= fwf.getBoolean("flicker");
-//        return flicker;
-//    }
-//
-//    private static FireworkEffect.Type readType(ConfigurationSection fwf) {
-//        FireworkEffect.Type type;
-//        type= FireworkEffect.Type.valueOf(fwf.getString("type"));
-//        return type;
-//    }
-//
-//    private static void readFadeColors(ConfigurationSection fwf, List<Color> fadeColor) {
-//        fwf.getIntegerList("fade_colors").stream().peek(
-//                (Integer integer)-> fadeColor.add(Color.fromRGB(integer))
-//        );
-//    }
-//
-//    private static void readMainColors(ConfigurationSection fwf, List<Color> mainColor) {
-//        fwf.getIntegerList("main_colors").stream().peek(
-//                (Integer integer)-> mainColor.add(Color.fromRGB(integer))
-//        );
-//    }
 
     public static FireworkShow readFireworkShow(String name){
-        ConfigurationSection fireworkShowFile = fireworkShowsFile.getConfigurationSection(name);
+        ConfigurationSection fireworkShowFile = FIREWORK_SHOWS_FILE.getConfigurationSection(name);
         FireworkShow fireworkShow = FireworkShow.createFireworkShow(name);
 
         assert fireworkShowFile != null;
-        for (String fireworksPath:fireworkShowFile.getKeys(false)){
-            ConfigurationSection fireworksFile = fireworkShowFile.getConfigurationSection(fireworksPath);
 
-            List<org.abstruck.plugin.firework.runtime.Firework> fireworkList = new ArrayList<>();
+        Set<String> fireworksKeys = fireworkShowFile.getKeys(false);
+        fireworksKeys.forEach(
+                fireworksPath->{
+                    ConfigurationSection fireworksFile = fireworkShowFile.getConfigurationSection(fireworksPath);
 
-            for (String fireworkPath:fireworksFile.getKeys(false)){
+                    if (fireworksFile==null){
+                        throw new RuntimeException("fireworks is null");
+                    }
 
-                if ("period".equals(fireworkPath)){
-                    continue;
+                    List<org.abstruck.plugin.firework.runtime.Firework> fireworkList = new ArrayList<>();
+                    Set<String> fireworkKeys = fireworksFile.getKeys(false);
+
+
+                    fireworkKeys.forEach(
+                            fireworkPath->{
+
+                                if ("period".equals(fireworkPath)){
+                                    return;
+                                }
+
+                                ConfigurationSection fireworkFile = fireworksFile.getConfigurationSection(fireworkPath);
+
+                                org.abstruck.plugin.firework.runtime.Firework firework;
+
+                                if (fireworkFile == null) {
+                                    throw new RuntimeException("firework file is null");
+                                }
+
+                                firework = readFirework(fireworkFile);
+
+                                fireworkList.add(firework);
+                            }
+                    );
+
+                    fireworkShow.addFireworks(Fireworks.createFireworks(fireworkList,fireworksFile.getInt("period")));
                 }
-                ConfigurationSection fireworkFile = fireworksFile.getConfigurationSection(fireworkPath);
+        );
 
-                List<Color> mainColors = new ArrayList<>();
-                List<Color> fadeColors = new ArrayList<>();
-                FireworkEffect.Type type;
-                boolean flicker;
-                boolean trail;
-                int power;
-                int xPos;
-                int yPos;
-                int zPos;
-
-                fireworkFile.getIntegerList("main_colors").stream().forEach(
-                        i->{
-                            mainColors.add(Color.fromRGB(i));
-                        }
-                );
-                fireworkFile.getIntegerList("fade_colors").stream().forEach(
-                        i->{
-                            fadeColors.add(Color.fromRGB(i));
-                        }
-                );
-                type = FireworkEffect.Type.valueOf(fireworkFile.getString("type"));
-                flicker = fireworkFile.getBoolean("flicker");
-                trail = fireworkFile.getBoolean("trail");
-                power = fireworkFile.getInt("power");
-                xPos = fireworkFile.getInt("x_pos");
-                yPos = fireworkFile.getInt("y_pos");
-                zPos = fireworkFile.getInt("z_pos");
-
-                org.abstruck.plugin.firework.runtime.Firework firework = org.abstruck.plugin.firework.runtime.Firework.createFirework(
-                        mainColors,
-                        fadeColors,
-                        type,
-                        flicker,
-                        trail,
-                        power,
-                        xPos,
-                        yPos,
-                        zPos
-                );
-
-                fireworkList.add(firework);
-            }
-            fireworkShow.addFireworks(Fireworks.createFireworks(fireworkList,fireworksFile.getInt("period")));
-        }
         return fireworkShow;
     }
+
+    private static org.abstruck.plugin.firework.runtime.Firework readFirework(ConfigurationSection fireworkFile) {
+        List<Color> mainColors = new ArrayList<>();
+        List<Color> fadeColors = new ArrayList<>();
+        FireworkEffect.Type type;
+        boolean flicker;
+        boolean trail;
+        int power;
+        int xPos;
+        int yPos;
+        int zPos;
+
+        readMainColors(fireworkFile, mainColors);
+        readFadeColors(fireworkFile, fadeColors);
+        type = getType(fireworkFile);
+        flicker = isFlicker(fireworkFile);
+        trail = isTrail(fireworkFile);
+        power = getPower(fireworkFile);
+        xPos = getX_pos(fireworkFile);
+        yPos = getY_pos(fireworkFile);
+        zPos = getZ_pos(fireworkFile);
+
+        return org.abstruck.plugin.firework.runtime.Firework.createFirework(
+                mainColors,
+                fadeColors,
+                type,
+                flicker,
+                trail,
+                power,
+                xPos,
+                yPos,
+                zPos
+        );
+    }
+
+    private static void readMainColors(ConfigurationSection fireworkFile, List<Color> mainColors) {
+        fireworkFile.getIntegerList("main_colors").forEach(
+                i-> mainColors.add(Color.fromRGB(i))
+        );
+    }
+
+    private static void readFadeColors(ConfigurationSection fireworkFile, List<Color> fadeColors) {
+        fireworkFile.getIntegerList("fade_colors").forEach(
+                i-> fadeColors.add(Color.fromRGB(i))
+        );
+    }
+
+    private static FireworkEffect.Type getType(ConfigurationSection fireworkFile) {
+        return FireworkEffect.Type.valueOf(fireworkFile.getString("type"));
+    }
+
+    private static boolean isFlicker(ConfigurationSection fireworkFile) {
+        return fireworkFile.getBoolean("flicker");
+    }
+
+    private static boolean isTrail(ConfigurationSection fireworkFile) {
+        return fireworkFile.getBoolean("trail");
+    }
+
+    private static int getPower(ConfigurationSection fireworkFile) {
+        return fireworkFile.getInt("power");
+    }
+
+    private static int getX_pos(ConfigurationSection fireworkFile) {
+        return fireworkFile.getInt("x_pos");
+    }
+
+    private static int getY_pos(ConfigurationSection fireworkFile) {
+        return fireworkFile.getInt("y_pos");
+    }
+
+    private static int getZ_pos(ConfigurationSection fireworkFile) {
+        return fireworkFile.getInt("z_pos");
+    }
+
     public static boolean checkFireworkShow(String name){
         return fireworkNames.contains(name);
     }
     public static void reloadFireworkShowNames(){
-        fireworkNames = fireworkShowsFile.getKeys(false);
+        fireworkNames = FIREWORK_SHOWS_FILE.getKeys(false);
     }
 }
